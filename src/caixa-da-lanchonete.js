@@ -30,15 +30,29 @@ class CaixaDaLanchonete {
                 return 'Item inválido!';
             }
 
+            if (parseInt(quantidade) <= 0) {
+                return 'Quantidade inválida!';
+            }
+
             const precoItem = this.cardapio[codigo].valor;
 
             if (codigo !== 'chantily' && codigo !== 'queijo') {
                 total += precoItem * parseInt(quantidade);
-            } else {
+            }
+        }
+
+        for (const item of itens) {
+            const [codigo, quantidade] = item.split(',');
+
+            if (codigo === 'chantily' || codigo === 'queijo') {
                 const itemPrincipal = codigo === 'chantily' ? 'cafe' : 'sanduiche';
-                if (!itens.includes(`${itemPrincipal},${quantidade}`)) {
+                const quantidadePrincipal = itens.find(it => it.startsWith(itemPrincipal));
+                
+                if (!quantidadePrincipal) {
                     return 'Item extra não pode ser pedido sem o principal';
                 }
+
+                const precoItem = this.cardapio[codigo].valor;
                 total += precoItem * parseInt(quantidade);
             }
         }
